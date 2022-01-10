@@ -1,0 +1,8 @@
+table: jean {
+  header = true,  
+  labels = ["titulo1", "titulo2","titulo3",],
+  columns = 3,
+  rows = 3,
+  footer = true,
+  contentFooter = ["titulo1", "titulo2","titulo3",],
+};

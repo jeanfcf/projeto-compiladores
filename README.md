@@ -1,34 +1,30 @@
-# Criação de um padrão de projeto(design pattern) - singleton - com finalidade de comunicação com um banco de dados a partir de uma linguagem de domínio específico
+# Criação de uma tabela HTML a partir de uma linguagem de domínio específico
 
 ### 1. Equipe do projeto
-
+  - Bruno de Lima Cavalcanti
   - Jean Felipe Coelho Ferreira
+  - Julia Simone Araujo da Silva
   - Lucas Matheus da Silva Oliveira
+  - Victor Guilherme Pereira Pimentel de Barros
 
 ### 2. Motivação
 
-  Para simplificar a construção de um código java capaz de se comunicar com um banco de dados e que ao mesmo tempo seja um singleton, criaremos uma linguagem que facilitará a construção destes código e um compilador capaz de converter o código gerado a partir desta linguagem em um singleton com os métodos prontos.
-  #### O Singleton é um padrão de projeto que tem como objetivo a solução de dois problemas de uma aplicação:
-  - Garantir que uma classe tenha somente uma instância no programa - Mais comum em programas que acessam recursos compartilhados, como bases de dados, sistemas de arquivos, interfaces gráficas, spoolers de impressão, módulos de um programa e entre outos.
-  - Fornecer um ponto de acesso global para a mesma - Assemelha o singleton com variáveis globais, porque possuimos um único objeto, com acesso global, que pode ser usado em várias partes da aplicação.
-  - Mesmo sendo um dos padrões com maior uso atualmente, requer muito conhecimento e cuidado quando for utilizar. Um programador facilmente cria um Singleton que pode acabar gerando problemas de concorrência dentro do programa.
+Criamos uma linguagem própria que serve como base para construção de um compilador capaz de converter o código gerado em um arquivo HTML, além da disponibilização da tabela no console, com os componentes de estrutura semi-prontos, como: header, footer e as respectivas células. 
+
+  >O uso desse gerador de tabela em HTML facilita o dia a dia de desenvolvedores em ter a praticidade de gerar tabelas pré prontas na construção de seus códigos.
 
 ### 3. Exemplos da Linguagem e do Resultado Esperado
 
-  #### **A linguagem foi definida através da estrutura abaixo, onde por exemplo:**
-
- - **Tabela:** tabelaBanco = nomeTabela&
- - **Classe:** classeModel = nomeClasse&
- - **Colunas:** colunasTabela = nomeColuna(tipoColuna) outraColuna(tipoColuna)&
- - **Método:** metodoSQL = TIPOMETODO
-
   #### **Construção de uma entrada:**
-
   ```
-  tabelaBanco = tabela&
-  classeModel = classe&
-  colunasTabela = coluna(int) outracoluna(double)&
-  metodoSQL = INSERT
+  table: string {
+    header = boolean,  
+    labels = ["string", "string","string", ... ],
+    columns = int,
+    rows = int,
+    footer = boolean,
+    contentFooter = ["string","string","string", ... ],
+  }
   ```
 
   #### **Exemplo:**
@@ -36,116 +32,109 @@
   - ##### **Entrada:**
 
   ```String
-    tabelaBanco = usuarios&
-    classeModel = User&
-    colunasTabela = cpf(int) nome(double)&
-    metodoSQL = INSERT
+  table: jean {
+  header = true,  
+  labels = ["titulo1", "titulo2",],
+  columns = 2,
+  rows = 2,
+  footer = true,
+  contentFooter = ["footer1","footer2",],
+  };
   ```
 
   - ##### **Saída:**
 
-  ```java
-  public interface User {
-    int getCpf();
-    double getNome();
-    int setCpf();
-    double setNome();
-  }
+  ```HTML
+ <html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+<body>
+<table border="1">
+    <thead>
+        <tr>
+            <th> "titulo1" </th>
+            <th> "titulo2" </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td> Preencha aqui! </td>
+            <td> Preencha aqui! </td>
+        </tr>
+        <tr>
+            <td> Preencha aqui! </td>
+            <td> Preencha aqui! </td>
+        </tr>
+        <tr>
+            <td> Preencha aqui! </td>
+            <td> Preencha aqui! </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <td> "footer1" </td>
+        <td> "footer2" </td>
+    </tfoot>
+</table>
+</body>
+</html>
 
-  public class UserModel implements User {
-    private int cpf;
-    private double nome;
-    public int setCpf(int cpf) {
-      this.cpf = cpf;
-    }
-    public double setNome(double nome) {
-      this.nome = nome;
-    }
-    public int getCpf(int cpf) {
-      this.cpf = cpf;
-    }
-    public double getNome(double nome) {
-      this.nome = nome;
-    }
-  }
-
-  public class MyDatabaseSingleton {
-
-    private static MyDatabaseSingleton instance ;
-    public String value;
-    private List<UserModel> users = new ArrayList<>();
-
-    private MyDatabaseSingleton(String value) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-        this.value = value;
-    }
-
-    public static MyDatabaseSingleton getInstance(String value ) {
-        if (this.instance == null) {
-            this.instance = new MyDatabaseSingleton(value);
-        }
-        return this.instance;
-    }
-
-    public static void insertBanco(int cpf,double nome) {
-      try {
-          stmt = con.conectar().createStatement();
-          rs = stmt.executeQuery('INSERT');
-          UserModel p = new UserModel(cpf,nome);
-          rs.create(p,usuarios)
-          this.users.add(p)
-      } catch (ClassNotFoundException | SQLException e) {
-          e.printStackTrace();
-          return null;
-      } finally {
-          try {
-              stmt.close();
-              rs.close();
-          } catch (SQLException e) {
-              e.printStackTrace();
-          }
-      }
-    }
-    public static void add(UserModel user) {
-        this.users.add(user);
-    }
-  }
   ```
 
 ### 4. Gramática da Linguagem
 
   ```
-    Start = Tabela+
-    Classe = "classeModel = " nomeClasse "&" Colunas 
-    Colunas = "colunasTabela = "(nomeColuna "(" tipos ")")+ "&" Metodos
-    Tabela = "tabelaBanco = " nomeTabela "&" Classe
-    Metodos = "metodoSQL = " tiposMetodos
-    tiposMetodos = "INSERT"
-        | "SELECT"
-        | "DELETE"
-    nomeTabela = letter+
-    nomeClasse = letter+
-    nomeColuna = letter+
-    tipos = "String"
-        | "int"
-        | "double"
-        | "boolean" 
+start : dec* com* EOF ; 
+
+dec : 'table' ':' VAR '{' columns rows title? header? labels? footer? content? '}' PV ;
+
+com : 'show' APAR VAR FPAR PV #Show ;
+
+columns: 'columns' ATRIB NUM VIR? #Coluna;
+
+rows: 'rows' ATRIB NUM VIR? #Linha;
+
+title : 'title' ATRIB STRING VIR? #Tit;
+
+header : 'header' ATRIB TRUE VIR? #Head;
+
+footer : 'footer' ATRIB TRUE VIR? #Foot;
+
+labels : 'labels' ATRIB '[' ( STRING VIR )* ']' VIR? #Lab  ;
+
+content : 'contentFooter' ATRIB '[' ( STRING VIR )* ']' VIR? #Con ;
+
+ATRIB : '=' ;
+PV : ';' ;
+TRUE : 'true'; 
+VAR : [a-z]+ ;
+NUM : '-'?[0-9]+ ;
+STRING : '"' (~["] | '\\"')* '"' ;
+APAR : '(' ;
+FPAR : ')' ;
+VIR: ',' ;
+
+SPACES : (' '  | '\n' | '\t' | '\r') -> skip;
   ```
+### 5. Regras de Sintaxe
+ - A ordem dos atributos deve seguir a **Construção de uma entrada**.
+ - ```columns``` e ```rows``` são obrigatórios, ```header``` e ```footer``` são opcionais.
+ - Se ```header = true``` só irá gerar o header se fornecido ```labels```;
+ - Se ```footer = true``` só irá gerar o footer se fornecido ```contentFooter```;
+ - Se existir ```labels``` : Nº de Colunas = Nº Labels;
+ - Se existir ```contentFooter``` : Nº de Colunas = Nº contentFooter;
+ - Nº de Linhas deve ser no mínimo 1;
+ - Nº de Colunas deve ser no mínimo 1.
 
-### 5. Descrição do Processo de Geração de Código ou execução
 
-  #### Descrição:
-  Nós decidimos gerar o código a partir de um objeto gerado através de uma árvore semântica. De início, nós criamos a semântica e adicionamos uma "operação" na mesma para criar um objeto em um formato adequado através da árvore. 
-  Com o objeto criado, nós extraímos suas propriedades e construímos o código de saída.
-  Portanto, a saída do nosso programa foi uma interface com os metodos necessarios para implementação da classe modelo, e um singleton contendo as operações com o banco.
 
-### 6. Manual de uso.
+### 6. Manual de uso
 
-  1. Abra o arquivo index.js;
-    *- Obs:  Apenas se você estiver executando no replit!*
-  2. Aperte o botão Run que aparece na parte superior;
-  3. Ao concluir a execução, todo o código gerado estará disponível no console.
+  1. Abrir o arquivo teste.tableGen;
+  2. Criar o input seguindo as regras de sintaxe;
+  3. Escolha a IDE de sua preferência, adicione o antlr.jar ao CLASSPATH;
+  4. Execute o arquivo compile.sh;
+  5. Rode o arquivo Main.java na IDE escolhida;
+  4. Ao concluir a execução, todo o código gerado estará disponível no console e um arquivo HTML será gerado.
+  
